@@ -82,8 +82,10 @@ function spin() {
 		}
 	}
 
-	const reels = [[], [], []];
+	const reels = [];
 	for (let i = 0; i < COLS; i++) {
+		reels.push([]);
+		// copy all symbols into available symbols array
 		const availableSymbols = [...symbols];
 		for (let j = 0; j < ROWS; j++) {
 			// randomly select a symbol for each reel
@@ -98,13 +100,37 @@ function spin() {
 }
 
 
+function transpose(reels) {
+	const rows = [];
 
+	for (let i = 0; i < ROWS; i++) {
+		rows.push([]);
+		for (let j = 0; j < COLS; j++) {
+			rows[i].push(reels[j][i]);
+		}
+	}
 
+	return rows;
+}
 
-const reels = spin();
-console.log(reels);
+function printRows(rows) {
+	for (const row of rows) {
+		let rowString = "";
+		for (const [i, symbol] of row.entries()) {
+			rowString += symbol;
+			if (i != row.length - 1) {
+				rowString += " | ";
+			}
+		}
+		console.log(rowString);
+	}
+}
+
 // let because this will be modified
 let balance = deposit();
 const numLines = getNumberOfLines();
 const bet = getBet(balance, numLines);
+const reels = spin();
+const rows = transpose(reels);
+printRows(rows);
 
